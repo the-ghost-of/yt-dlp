@@ -5,6 +5,7 @@ Usage: python3 ./devscripts/update-formulae.py <path-to-formulae-rb> <version>
 version can be either 0-aligned (yt-dlp version) or normalized (PyPi version)
 """
 
+
 # Allow direct execution
 import os
 import sys
@@ -22,9 +23,14 @@ filename, version = sys.argv[1:]
 
 normalized_version = '.'.join(str(int(x)) for x in version.split('.'))
 
-pypi_release = json.loads(urllib.request.urlopen(
-    'https://pypi.org/pypi/yt-dlp/%s/json' % normalized_version
-).read().decode())
+pypi_release = json.loads(
+    urllib.request.urlopen(
+        f'https://pypi.org/pypi/yt-dlp/{normalized_version}/json'
+    )
+    .read()
+    .decode()
+)
+
 
 tarball_file = next(x for x in pypi_release['urls'] if x['filename'].endswith('.tar.gz'))
 
